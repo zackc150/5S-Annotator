@@ -1,0 +1,25 @@
+{
+  "name": "5S Photo Annotator",
+  "short_name": "5S Annotator",
+  "description": "Annotate shop floor photos with hazard tape lines, callouts, and labels for 5S lean projects",
+  "start_url": "./index.html",
+  "display": "fullscreen",
+  "orientation": "portrait-primary",
+  "background_color": "#111111",
+  "theme_color": "#FFD600",
+  "categories": ["productivity", "utilities"],
+  "icons": [
+    {
+      "src": "icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}
