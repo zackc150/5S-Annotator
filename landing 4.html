@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>5S Annotator — Professional Lean Manufacturing Photo Tool</title>
+<meta name="description" content="Free mobile app for 5S lean manufacturing photo annotation. Draw hazard tape, zones, callouts, take measurements and generate audit reports directly from your phone.">
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Mono:wght@400;500&display=swap');
+:root{--y:#FFD600;--blk:#111;--wht:#F5F5F0;--dim:#888;--red:#C62828;--grn:#2E7D32;--bg:#0e0e0e;--panel:#181818;--border:#2e2e2e}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'DM Mono',monospace;background:var(--bg);color:var(--wht);overflow-x:hidden}
+
+/* HERO */
+.hero{min-height:100vh;background:repeating-linear-gradient(-45deg,#FFD600 0,#FFD600 40px,#111 40px,#111 80px);display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden}
+.hero-inner{background:var(--blk);margin:40px;padding:clamp(32px,5vw,56px) clamp(28px,4vw,48px);max-width:720px;width:100%;border:4px solid var(--y);text-align:center;position:relative;z-index:1}
+.hero h1{font-family:'Bebas Neue',sans-serif;font-size:clamp(3.5rem,10vw,6rem);letter-spacing:4px;color:var(--y);line-height:1;margin-bottom:6px}
+.hero .sub{font-size:clamp(0.7rem,2vw,0.9rem);color:var(--dim);letter-spacing:3px;text-transform:uppercase;margin-bottom:10px}
+.hero .tagline{font-size:clamp(0.75rem,1.8vw,1rem);color:var(--wht);margin-bottom:32px;line-height:1.6}
+.cta-row{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-bottom:20px}
+.cta{display:inline-block;font-family:'Bebas Neue',sans-serif;font-size:clamp(1rem,2vw,1.2rem);letter-spacing:2px;padding:clamp(12px,2vh,16px) clamp(24px,4vw,36px);border-radius:4px;text-decoration:none;transition:transform .15s,opacity .15s;cursor:pointer}
+.cta:hover{transform:translateY(-2px);opacity:.9}
+.cta.primary{background:var(--y);color:var(--blk)}
+.cta.secondary{background:transparent;color:var(--y);border:2px solid var(--y)}
+.badges{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;font-size:0.62rem;color:#555;letter-spacing:1px}
+.badge-pill{background:#1a1a1a;border:1px solid #333;border-radius:20px;padding:4px 10px;color:#777}
+
+/* SECTIONS */
+.section{padding:clamp(60px,8vh,96px) clamp(20px,4vw,40px);max-width:1000px;margin:0 auto}
+.section-title{font-family:'Bebas Neue',sans-serif;font-size:clamp(1.8rem,4vw,2.8rem);letter-spacing:4px;color:var(--y);margin-bottom:6px}
+.section-sub{font-size:clamp(0.65rem,1.2vw,0.78rem);color:var(--dim);letter-spacing:2px;margin-bottom:clamp(28px,4vh,44px);text-transform:uppercase}
+
+/* FEATURE GRID */
+.feat-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:clamp(10px,1.5vw,16px)}
+.feat{background:var(--panel);border:1px solid var(--border);border-radius:8px;padding:clamp(18px,2.5vw,28px)}
+.feat-icon{font-size:1.8rem;margin-bottom:10px}
+.feat-title{font-family:'Bebas Neue',sans-serif;font-size:clamp(0.95rem,1.6vw,1.15rem);letter-spacing:2px;color:var(--y);margin-bottom:6px}
+.feat-desc{font-size:clamp(0.65rem,1.1vw,0.75rem);color:var(--dim);line-height:1.75}
+
+/* TOOLS GRID */
+.tools-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:clamp(8px,1.2vw,12px)}
+.tool-card{background:var(--panel);border:1px solid var(--border);border-radius:6px;padding:clamp(14px,2vw,20px) clamp(10px,1.5vw,14px);text-align:center}
+.tool-svg{margin:0 auto 8px;opacity:.9}
+.tool-name{font-family:'Bebas Neue',sans-serif;font-size:clamp(0.78rem,1.2vw,0.92rem);letter-spacing:2px;color:var(--y);margin-bottom:4px}
+.tool-desc{font-size:clamp(0.58rem,.95vw,0.68rem);color:var(--dim);line-height:1.5}
+
+/* STEPS */
+.steps{display:flex;flex-direction:column;gap:0}
+.step{display:flex;gap:clamp(16px,2.5vw,24px);align-items:flex-start;padding:clamp(18px,2.5vh,26px) 0;border-bottom:1px solid #222}
+.step:last-child{border-bottom:none}
+.step-num{font-family:'Bebas Neue',sans-serif;font-size:clamp(2rem,4vw,2.8rem);color:var(--y);line-height:1;flex-shrink:0;width:clamp(40px,5vw,56px);text-align:center}
+.step-title{font-family:'Bebas Neue',sans-serif;font-size:clamp(0.9rem,1.5vw,1.1rem);letter-spacing:2px;color:var(--wht);margin-bottom:4px}
+.step-desc{font-size:clamp(0.65rem,1.1vw,0.75rem);color:var(--dim);line-height:1.75}
+
+/* COLOR KEY */
+.color-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:8px}
+.color-row{display:flex;align-items:center;gap:12px;background:var(--panel);border-radius:6px;padding:clamp(8px,1.2vh,12px) clamp(10px,1.5vw,14px)}
+.cswatch{width:42px;height:30px;border-radius:4px;flex-shrink:0}
+.cname{font-size:clamp(0.68rem,1.1vw,0.8rem);font-weight:500;color:var(--wht)}
+.cuse{font-size:clamp(0.57rem,.9vw,0.65rem);color:var(--dim);margin-top:1px}
+
+/* INSTALL */
+.install-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:clamp(10px,1.5vw,16px)}
+
+/* CONSULTING */
+.consulting{background:var(--panel);border:2px solid var(--y);border-radius:8px;padding:clamp(24px,3.5vw,40px);margin-top:40px}
+.consulting h3{font-family:'Bebas Neue',sans-serif;font-size:clamp(1.2rem,2.2vw,1.6rem);letter-spacing:3px;color:var(--y);margin-bottom:clamp(14px,2vh,20px)}
+.biz-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:clamp(14px,2vw,20px)}
+.biz-item{border-left:3px solid var(--y);padding-left:14px}
+.biz-title{font-size:clamp(0.7rem,1.1vw,0.82rem);font-weight:500;color:var(--wht);margin-bottom:4px}
+.biz-desc{font-size:clamp(0.62rem,.95vw,0.72rem);color:var(--dim);line-height:1.65}
+
+/* FOOTER */
+footer{background:#0a0a0a;border-top:3px solid var(--y);padding:clamp(28px,4vh,44px) clamp(20px,4vw,40px);text-align:center}
+.footer-logo{font-family:'Bebas Neue',sans-serif;font-size:clamp(1.5rem,3vw,2rem);letter-spacing:4px;color:var(--y);margin-bottom:6px}
+.footer-sub{font-size:clamp(0.58rem,.9vw,0.68rem);color:#555;letter-spacing:1px;margin-bottom:14px}
+.footer-links{display:flex;gap:clamp(14px,2.5vw,24px);justify-content:center;flex-wrap:wrap}
+.footer-links a{font-size:clamp(0.6rem,.9vw,0.7rem);color:#666;text-decoration:none;letter-spacing:1px}
+.footer-links a:hover{color:var(--y)}
+
+.hz{height:8px;background:repeating-linear-gradient(-45deg,var(--y) 0,var(--y) 10px,var(--blk) 10px,var(--blk) 20px)}
+
+/* SVG inline helpers */
+.ti svg{display:inline-block;vertical-align:middle}
+
+@media(max-width:600px){.hero-inner{margin:16px;padding:28px 20px}.section{padding:44px 16px}}
+</style>
+</head>
+<body>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-inner">
+    <div style="font-family:'DM Mono',monospace;font-size:0.6rem;letter-spacing:3px;color:#444;margin-bottom:10px">COOPER 3D CREATIONS</div>
+    <h1>5S<br>ANNOTATOR</h1>
+    <p class="sub">Professional Lean Manufacturing Photo Tool</p>
+    <p class="tagline">Draw hazard tape, zones, labels and dimension lines directly on shop floor photos.<br>Generate audit reports, take real-world measurements, and deliver professional 5S documentation.</p>
+    <div class="cta-row">
+      <a href="https://zackc150.github.io/5S-Annotator/index.html" class="cta primary">🚀 LAUNCH APP</a>
+      <a href="#features" class="cta secondary">SEE FEATURES</a>
+    </div>
+    <div class="badges">
+      <span class="badge-pill">Free</span>
+      <span class="badge-pill">No account needed</span>
+      <span class="badge-pill">iPhone + Mac + PC</span>
+      <span class="badge-pill">Works offline</span>
+      <span class="badge-pill">12 drawing tools</span>
+    </div>
+  </div>
+</section>
+
+<div class="hz"></div>
+
+<!-- FEATURES -->
+<div class="section" id="features">
+  <div class="section-title">What It Does</div>
+  <div class="section-sub">Everything you need for professional 5S visual documentation</div>
+  <div class="feat-grid">
+    <div class="feat">
+      <div class="feat-icon">⚠️</div>
+      <div class="feat-title">Hazard Tape & Solid Tape</div>
+      <div class="feat-desc">Draw black/yellow, red/white, and 6 other stripe patterns directly on photos. Solid color tape in all 5S standard colors. Multi-point chains with clean mitered corners and an optional CAD-style centerline.</div>
+    </div>
+    <div class="feat">
+      <div class="feat-icon">📐</div>
+      <div class="feat-title">Real-World Measurements</div>
+      <div class="feat-desc">Calibrate scale by tapping two known points. Every annotation automatically shows real dimensions — line lengths, zone areas in sq ft, circle diameters. CAD-style dimension lines with arrows. Dimensions export with the photo and appear in reports.</div>
+    </div>
+    <div class="feat">
+      <div class="feat-icon">📋</div>
+      <div class="feat-title">Audit Reports & Scoring</div>
+      <div class="feat-desc">Built-in 5S scoring (1–5 per S, out of 25, letter grade A–F). Generate a professional HTML report with annotated photo, action table, audit scores, real dimensions, and annotation notes. Print as PDF from any browser.</div>
+    </div>
+    <div class="feat">
+      <div class="feat-icon">💾</div>
+      <div class="feat-title">Save & Restore Sessions</div>
+      <div class="feat-desc">Export your entire work session — photo, all annotations, measurement scale, and audit scores — to a .5ss file. Reload it later to continue exactly where you left off. Works across devices.</div>
+    </div>
+    <div class="feat">
+      <div class="feat-icon">✥</div>
+      <div class="feat-title">Full Edit Mode</div>
+      <div class="feat-desc">Select any annotation to move, resize, rotate, duplicate, lock, or delete it. Copy style from one annotation to paste onto others. Control z-order. Adjust opacity live. Add notes to individual annotations.</div>
+    </div>
+    <div class="feat">
+      <div class="feat-icon">🗺</div>
+      <div class="feat-title">Auto Legend</div>
+      <div class="feat-desc">Toggle a live color key showing only the colors you've used with their 5S standard meanings. Exports baked into the saved photo so anyone can read your annotations without explanation.</div>
+    </div>
+    <div class="feat">
+      <div class="feat-icon">🧲</div>
+      <div class="feat-title">Smart Snap System</div>
+      <div class="feat-desc">Snaps to endpoints, midpoints of existing lines, and auto-locks to 0°/45°/90° angles like CAD software. Auto-detects when you're closing a shape. Toggle snap on/off anytime.</div>
+    </div>
+    <div class="feat">
+      <div class="feat-icon">🤖</div>
+      <div class="feat-title">AI Shadow Board Detection</div>
+      <div class="feat-desc">Point the camera at a tool board and tap AI Detect — Claude Vision automatically identifies each tool and draws shadow board outlines around them. One tap, ready to print.</div>
+    </div>
+  </div>
+</div>
+
+<div class="hz"></div>
+
+<!-- TOOLS -->
+<div class="section">
+  <div class="section-title">12 Drawing Tools</div>
+  <div class="section-sub">A tool for every 5S annotation need</div>
+  <div class="tools-grid">
+
+    <div class="tool-card">
+      <div class="tool-svg"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#FFD600" stroke-width="1.5" stroke-linecap="round"><rect x="2" y="4" width="20" height="16" rx="1"/><line x1="2" y1="10" x2="8" y2="4"/><line x1="7" y1="20" x2="20" y2="7"/><line x1="14" y1="20" x2="20" y2="14"/></svg></div>
+      <div class="tool-name">Hazard Tape</div>
+      <div class="tool-desc">Multi-point stripe lines, 6 color combos, closed shapes</div>
+    </div>
+
+    <div class="tool-card">
+      <div class="tool-svg"><svg width="32" height="32" viewBox="0 0 24 24" fill="#FFD600" stroke="none"><rect x="2" y="8" width="20" height="8" rx="3"/></svg></div>
+      <div class="tool-name">Solid Tape</div>
+      <div class="tool-desc">Solid color tape in all 5S standard colors</div>
+    </div>
+
+    <div class="tool-card">
+      <div class="tool-svg"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#FFD600" stroke-width="2" stroke-linecap="round"><line x1="4" y1="20" x2="20" y2="4"/></svg></div>
+      <div class="tool-name">Line</div>
+      <div class="tool-desc">Boundary lines with angle lock and snap</div>
+    </div>
+
+    <div class="tool-card">
+      <div class="tool-svg"><svg width="32" height="32" viewBox="0 0 24 24" fill="rgba(255,214,0,.15)" stroke="#FFD600" stroke-width="1.5" stroke-linecap="round"><polygon points="12,2 21,7 21,17 12,22 3,17 3,7"/></svg></div>
+      <div class="tool-name">Zone</div>
+      <div class="tool-desc">Multi-point filled zones, auto-closes, shows area</div>
+    </div>
+
+    <div class="tool-card">
+      <div class="tool-svg"><svg width="32" height="32" viewBox="0 0 24 24" fill="rgba(255,214,0,.12)" stroke="#FFD600" stroke-width="1.5"><circle cx="12" cy="12" r="9"/></svg></div>
+      <div class="tool-name">Circle</div>
+      <div class="tool-desc">Live radius preview, shows diameter + area</div>
+    </div>
+
+    <div class="tool-card">
+      <div class="tool-svg"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#FFD600" stroke-width="2" stroke-linecap="round"><path d="M 3 20 C 6 3, 18 3, 21 20"/></svg></div>
+      <div class="tool-name">Curve</div>
+      <div class="tool-desc">Smooth Bezier spline with live preview</div>
+    </div>
+
+    <div class="tool-card">
+      <div class="tool-svg"><svg width="32" height="32" viewBox="0 0 24 24" fill="rgba(255,214,0,.12)" stroke="#FFD600" stroke-width="1.5" stroke-linecap="round"><rect x="3" y="6" width="18" height="12" rx="1"/></svg></div>
+      <div class="tool-name">Rectangle</div>
+      <div class="tool-desc">Tap two corners, live size preview with dimensions</div>
+    </div>
+
+    <div class="tool-card">
+      <div class="tool-svg"><svg width="32" height="32" viewBox="0 0 24 24" fill="#FFD600" stroke="#FFD600" stroke-width="1.5" stroke-linecap="round"><line x1="4" y1="20" x2="20" y2="4" stroke-width="2"/><polyline points="10,4 20,4 20,14" fill="none"/></svg></div>
+      <div class="tool-name">Arrow</div>
+      <div class="tool-desc">Direction indicators with angle lock</div>
+    </div>
+
+    <div class="tool-card">
+      <div class="tool-svg"><svg width="32" height="32" viewBox="0 0 24 24" fill="#FFD600" stroke="none"><rect x="3" y="5" width="18" height="14" rx="2"/><rect x="6" y="9" width="6" height="1.5" fill="#111" rx="1"/><rect x="6" y="13" width="10" height="1.5" fill="#111" rx="1"/></svg></div>
+      <div class="tool-name">Label</div>
+      <div class="tool-desc">Color-coded text badges, rotatable, editable</div>
+    </div>
+
+    <div class="tool-card">
+      <div class="tool-svg"><svg width="32" height="32" viewBox="0 0 24 24" fill="#FFD600" stroke="none"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></div>
+      <div class="tool-name">Callout</div>
+      <div class="tool-desc">Speech-bubble issue callouts, rotatable</div>
+    </div>
+
+    <div class="tool-card">
+      <div class="tool-svg"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#FFD600" stroke-width="1.5" stroke-linecap="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg></div>
+      <div class="tool-name">Freehand</div>
+      <div class="tool-desc">Draw free-form, auto-simplified on release</div>
+    </div>
+
+    <div class="tool-card">
+      <div class="tool-svg"><svg width="32" height="32" viewBox="0 0 24 24" fill="rgba(255,214,0,.15)" stroke="#FFD600" stroke-width="1.5" stroke-dasharray="4 2" stroke-linecap="round"><rect x="3" y="3" width="18" height="18" rx="1"/></svg></div>
+      <div class="tool-name">Shadow Board</div>
+      <div class="tool-desc">Trace tool outlines or use AI detection</div>
+    </div>
+
+  </div>
+</div>
+
+<div class="hz"></div>
+
+<!-- 5S COLOR STANDARD -->
+<div class="section">
+  <div class="section-title">5S Color Standard</div>
+  <div class="section-sub">All OSHA/Lean standard colors built in</div>
+  <div class="color-grid">
+    <div class="color-row"><div class="cswatch" style="background:#FFD600"></div><div><div class="cname">YELLOW</div><div class="cuse">Aisles · Traffic lanes · Walkways</div></div></div>
+    <div class="color-row"><div class="cswatch" style="background:#F5F5F0;border:1px solid #444"></div><div><div class="cname">WHITE</div><div class="cuse">Equipment · Workstations · Carts</div></div></div>
+    <div class="color-row"><div class="cswatch" style="background:#2E7D32"></div><div><div class="cname">GREEN</div><div class="cuse">Finished goods · Safe areas</div></div></div>
+    <div class="color-row"><div class="cswatch" style="background:#C62828"></div><div><div class="cname">RED</div><div class="cuse">Defects · Scrap · Quarantine</div></div></div>
+    <div class="color-row"><div class="cswatch" style="background:#1565C0"></div><div><div class="cname">BLUE</div><div class="cuse">Raw materials · Work in process</div></div></div>
+    <div class="color-row"><div class="cswatch" style="background:#E65100"></div><div><div class="cname">ORANGE</div><div class="cuse">Inspection · Awaiting decision</div></div></div>
+    <div class="color-row"><div class="cswatch" style="background:repeating-linear-gradient(-45deg,#FFD600 0,#FFD600 6px,#111 6px,#111 12px)"></div><div><div class="cname">BLK/YEL STRIPE</div><div class="cuse">Hazard · Physical danger zones</div></div></div>
+    <div class="color-row"><div class="cswatch" style="background:repeating-linear-gradient(-45deg,#C62828 0,#C62828 6px,#fff 6px,#fff 12px)"></div><div><div class="cname">RED/WHT STRIPE</div><div class="cuse">Fire equipment · Emergency access</div></div></div>
+    <div class="color-row"><div class="cswatch" style="background:repeating-linear-gradient(-45deg,#111 0,#111 6px,#fff 6px,#fff 12px)"></div><div><div class="cname">BLK/WHT STRIPE</div><div class="cuse">Operational hazard · Keep clear</div></div></div>
+  </div>
+</div>
+
+<div class="hz"></div>
+
+<!-- HOW IT WORKS -->
+<div class="section">
+  <div class="section-title">How It Works</div>
+  <div class="section-sub">No account · No install · Runs in your browser</div>
+  <div class="steps">
+    <div class="step"><div class="step-num">1</div><div><div class="step-title">Load Your Photo</div><div class="step-desc">Tap PHOTO to pick from your camera roll, or tap CAMERA to shoot directly. Supports HEIC, JPEG, PNG. Photo never leaves your device.</div></div></div>
+    <div class="step"><div class="step-num">2</div><div><div class="step-title">Calibrate Scale (Optional)</div><div class="step-desc">Tap MEASURE, then tap two points you know the real distance between. Enter the distance — every annotation now shows real-world dimensions automatically.</div></div></div>
+    <div class="step"><div class="step-num">3</div><div><div class="step-title">Draw Your Annotations</div><div class="step-desc">Pick a tool from the bottom bar and tap points on the photo. Snap system locks to nearby points and 45° angles. Double-tap or ✓ to finish shapes. The app shows you exactly what you're drawing in real time.</div></div></div>
+    <div class="step"><div class="step-num">4</div><div><div class="step-title">Edit and Refine</div><div class="step-desc">Switch to Edit mode to move, resize, rotate, and duplicate anything. Copy styles across annotations, add notes, adjust opacity, lock annotations in place so they can't be accidentally moved.</div></div></div>
+    <div class="step"><div class="step-num">5</div><div><div class="step-title">Run the Audit</div><div class="step-desc">Tap AUDIT to score each S from 1–5 with notes. Get a score out of 25 with a letter grade. Export the audit as a standalone HTML file.</div></div></div>
+    <div class="step"><div class="step-num">6</div><div><div class="step-title">Export Everything</div><div class="step-desc">SAVE exports the annotated photo to your camera roll (iPhone) or downloads it (Mac). REPORT generates a professional PDF-ready HTML report with photo, all annotations, dimensions, notes, and audit score. SESSION saves your entire work to reload later.</div></div></div>
+  </div>
+</div>
+
+<div class="hz"></div>
+
+<!-- INSTALL -->
+<div class="section">
+  <div class="section-title">Install as an App</div>
+  <div class="section-sub">Works offline · No App Store needed</div>
+  <div class="install-grid">
+    <div class="feat">
+      <div class="feat-icon">📱</div>
+      <div class="feat-title">iPhone / iPad</div>
+      <div class="feat-desc">Open in Safari → tap Share → Add to Home Screen. Runs fullscreen like a native app. Works offline after first visit. Supports HEIC photos natively.</div>
+    </div>
+    <div class="feat">
+      <div class="feat-icon">💻</div>
+      <div class="feat-title">Mac / PC</div>
+      <div class="feat-desc">Open in Chrome or Edge → click the install icon in the address bar. Installs as a desktop app. Full keyboard shortcuts: ⌘Z undo, D/E/V modes, Enter to finish shapes, F for fullscreen.</div>
+    </div>
+    <div class="feat">
+      <div class="feat-icon">🔒</div>
+      <div class="feat-title">Private by Default</div>
+      <div class="feat-desc">Your photos never leave your device. All processing happens locally in your browser — nothing is uploaded anywhere. Sessions are saved as files you control.</div>
+    </div>
+  </div>
+
+  <div class="consulting">
+    <h3>Using This for 5S Consulting?</h3>
+    <div class="biz-grid">
+      <div class="biz-item">
+        <div class="biz-title">5S Jumpstart Package</div>
+        <div class="biz-desc">On-site assessment, annotated before/after photos with real dimensions, SOPs, visual standards, and one follow-up audit. Starting at $800.</div>
+      </div>
+      <div class="biz-item">
+        <div class="biz-title">Digital Systems Add-On</div>
+        <div class="biz-desc">Custom tracking dashboards, branded audit reports, and annotator deployment for your team. Retainer pricing available.</div>
+      </div>
+      <div class="biz-item">
+        <div class="biz-title">Ongoing 5S Support</div>
+        <div class="biz-desc">Scheduled audits, continuous improvement tracking, and staff training materials. Monthly plans available.</div>
+      </div>
+      <div class="biz-item">
+        <div class="biz-title">Get In Touch</div>
+        <div class="biz-desc">Cooper 3D Creations<br>Available for local and remote clients.<br><a href="https://www.etsy.com/shop/cooper3dcreations" target="_blank" style="color:var(--y);text-decoration:none">cooper3dcreations on Etsy →</a></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="hz"></div>
+
+<footer>
+  <div class="footer-logo">5S ANNOTATOR</div>
+  <div class="footer-sub">FREE · PROFESSIONAL · BUILT FOR LEAN MANUFACTURING</div>
+  <div class="footer-links">
+    <a href="https://zackc150.github.io/5S-Annotator/index.html">Launch App</a>
+    <a href="#features">Features</a>
+    <a href="https://www.etsy.com/shop/cooper3dcreations" target="_blank">Cooper 3D Creations</a>
+    <a href="https://github.com/zackc150/5S-Annotator" target="_blank">GitHub</a>
+  </div>
+  <div style="font-size:0.55rem;color:#333;letter-spacing:1px;margin-top:14px">© 2025 Cooper 3D Creations · Built with care for lean manufacturing professionals</div>
+</footer>
+
+</body>
+</html>
